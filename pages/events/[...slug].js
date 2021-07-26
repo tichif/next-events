@@ -13,12 +13,34 @@ const FilteredEventsPage = () => {
 
   const filteredData = router.query.slug;
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta name='description' content={`A list of featured events`} />
+    </Head>
+  );
+
   if (!filteredData) {
-    return <p className='center'>Loading...</p>;
+    return (
+      <Fragment>
+        {pageHeadData}
+        <p className='center'>Loading...</p>;
+      </Fragment>
+    );
   }
 
   const filteredYear = +filteredData[0];
   const filteredMonth = +filteredData[1];
+
+  pageHeadData = (
+    <Header>
+      <title>Filtered Events</title>
+      <meta
+        name='description'
+        content={`All events for ${filteredMonth}/${filteredYear}`}
+      />
+    </Header>
+  );
 
   if (
     isNaN(filteredYear) ||
@@ -30,6 +52,7 @@ const FilteredEventsPage = () => {
   ) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filtered. Please correct your values</p>
         </ErrorAlert>
@@ -48,6 +71,7 @@ const FilteredEventsPage = () => {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found</p>
         </ErrorAlert>
@@ -60,13 +84,7 @@ const FilteredEventsPage = () => {
 
   return (
     <Fragment>
-      <Header>
-        <title>Filtered Events</title>
-        <meta
-          name='description'
-          content={`All events for ${filteredMonth}/${filteredYear}`}
-        />
-      </Header>
+      {pageHeadData}
       <ResultsTitle date={new Date(filteredYear, filteredMonth - 1)} />
       <EventList items={filteredEvents} />
     </Fragment>
